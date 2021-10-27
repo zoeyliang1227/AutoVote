@@ -1,48 +1,37 @@
-import json
+import schedule
 import time
 import yaml
-import platform
-import os
 import datetime
 import random
-import sched
-import pickle
+import getpass
+import sys, os, time
+from selenium.webdriver.common.proxy import Proxy
+from selenium.webdriver.common.proxy import ProxyType
 
 
 from threading import Timer
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import NoSuchElementException
 
 credentials = yaml.load(open('config.yml'))
-# driver = get_driver()
-# wait = get_driver()
 
-hour = random.randint(7,12)
-minute = random.randint(0,59)
+# def job():
+#     print("I'm working...")
+#     ro()
 
-def doSth():
-    ro()
-    print(u'這個程式要開始瘋狂的運轉啦')
+# #     schedule.every(10).minutes.do(job) 
+# #     schedule.every().hour.do(job)
+# schedule.every().day.at('10:11').do(job)
+# #     schedule.every().monday.do(job)
+# #     schedule.every().wednesday.at("13:15").do(job)
+# #     schedule.every().minute.at(":17").do(job)   
 
-def main(h=hour,m=minute):
-    print(h,m)
-    while True:
-        now = datetime.datetime.now()
-        # print(now.hour, now.minute)
-        if now.hour == h and now.minute == m:
-            break
-    
-    doSth()
-
-    # 每86400秒（1天），傳送1次
-    t = Timer(86400, main)
-    t.start()
+# while True:  
+#     schedule.run_pending()  
+#     time.sleep(1)
 
 def get_driver():
     chrome_options = Options()
@@ -54,69 +43,88 @@ def get_driver():
         }
     }
     chrome_options.add_experimental_option('prefs', prefs)
+    
+    chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
     chrome_options.add_argument("disable-infobars")
     chrome_options.add_argument("window-size=1024,768")
-    # chrome_options.add_argument('headless')                 # 瀏覽器不提供可視化頁面
+    chrome_options.add_argument('headless')                 # 瀏覽器不提供可視化頁面
     chrome_options.add_argument('no-sandbox')               # 以最高權限運行
     chrome_options.add_argument('--start-maximized')        # 縮放縮放（全屏窗口）設置元素比較準確
     chrome_options.add_argument('--disable-gpu')            # 谷歌文檔說明需要加上這個屬性來規避bug
     chrome_options.add_argument('--window-size=1920,1080')  # 設置瀏覽器按鈕（窗口大小）
-    driver = webdriver.Chrome(chrome_options=chrome_options, executable_path = 'chromedriver')
+    chrome_options.add_argument('--disable-blink-features=AutomationControlled')
+
+    driver = webdriver.Chrome(options = chrome_options, executable_path = 'chromedriver')
+    # ro_url = 'https://rox.gnjoy.com.tw/roxfanart?work_id=19&fbclid=IwAR1qefjezAqYl8yjg1AXYgLaz6peT3tuzCuoxaLX9a6P2OIDJrUoA4dlzMY'
+    # driver.implicitly_wait(20) # 隱式等待，最長等20秒
+
     url = credentials['ro_url']
     ro_url = url
     driver.get(ro_url)
 
     return driver
 
-driver = get_driver()
-wait = WebDriverWait(driver, 1)
 
 def ro():    
-    ##登入FB
-    wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'style-module__title--1GEE0')))
-    for i in range(1):
-        try:
-            vote()
-            login()
+    try:
+        for i in range(2,4):
+            driver = get_driver()
+            # wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'style-module__title--1GEE0')))
+            vote(driver)
+            login(i, driver)
+            print(i)
             driver.refresh()
-            vote()
-
-            done_vote = driver.find_element_by_xpath('//*[@id="useModal__3"]/div/div/div[1]/div[1]')
-            done_vote.click()
-            print('111')
+            time.sleep(3)
+            vote(driver)
+            time.sleep(3)
+            done_vote = driver.find_element(By.XPATH, '//*[@id="useModal__3"]/div/div/div[1]/div[1]')
+            time.sleep(3)
             done_title = done_vote.text
             if done_title == '作品當天已投過票':
                 print(done_title)
-                break
+                close = driver.find_element(By.XPATH, '//*[@id="useModal__3"]/div/div/div[1]/div[2]').click()
+                driver.refresh()
+                time.sleep(3)
+                logout = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[1]/div[2]/div[2]/span')
+                logout_name = logout.text
+                logout.click()
+                print(logout_name)
+                driver.quit()
             else:
                 print(done_title)  
+                print('太感謝你了٩(●˙▿˙●)۶…⋆ฺ')
+    finally:
+        time.sleep(3)
+        driver.quit()
 
-        finally:
-            time.sleep(3)
-            driver.quit()
-
-def vote():
-    choose = driver.find_element_by_xpath('//*[@id="root"]/div/div[4]/div[1]/div[2]/div[2]')
+def vote(driver):     #choose and vote
+    choose = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[2]/div[2]')
     choose.click()
-    wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'style-module__active--1YiWY')))
+    WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.CLASS_NAME, 'style-module__active--1YiWY')))
     choose_title = choose.text
     print('click %s'%choose_title)
 
-    vote = driver.find_element_by_xpath('//*[@id="root"]/div/div[4]/div[1]/div[4]/div/div[1]/div/div[5]').click()
+    time.sleep(3)
+    vote = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[4]/div/div[1]/div/div[5]').click()
     
+def login(i, driver):
+    WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.CLASS_NAME, 'style-module__title--1v3XO')))
+    fb = driver.find_element(By.XPATH, '//*[@id="useModal__1"]/div/div/div[1]/div[2]').click()
+    username = credentials['ro_login' + str(i) +'']['username']
+    user = driver.find_element(By.ID, 'email').send_keys(username)
 
-def login():
-    wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'style-module__title--1v3XO')))
-    fb = driver.find_element_by_xpath('//*[@id="useModal__1"]/div/div/div[1]/div[2]').click()
-    wait.until(EC.presence_of_element_located((By.CLASS_NAME, '_9axz')))
-    username = credentials['ro_login']['username']
-    user = driver.find_element_by_id('email').send_keys(username)
-    password = credentials['ro_login']['password']
-    pwd = driver.find_element_by_id('pass').send_keys(password)
-    login = driver.find_element_by_id('loginbutton').click()
-    print('登入成功')
+    password = credentials['ro_login' + str(i) +'']['password']
+    pwd = driver.find_element(By.ID, 'pass').send_keys(password)
+    time.sleep(3)
+    login = driver.find_element(By.ID, 'loginbutton').click()
+    print('%s登入成功'%username)
+
+    return i
 
 
 
 if __name__ == '__main__':
+    # input_id = input('Your FB ID:')
+    # input_password = getpass.getpass('Your FB password') 
     ro()
+    # job()
