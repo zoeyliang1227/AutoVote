@@ -1,4 +1,10 @@
-url: https://rox.gnjoy.com.tw/roxfanart?work_id=19&fbclid=IwAR1qefjezAqYl8yjg1AXYgLaz6peT3tuzCuoxaLX9a6P2OIDJrUoA4dlzMY
-login:
+ro_url: https://rox.gnjoy.com.tw/roxfanart?work_id=19&fbclid=IwAR1qefjezAqYl8yjg1AXYgLaz6peT3tuzCuoxaLX9a6P2OIDJrUoA4dlzMY
+ro_login1:
   username: email
   password: correct_password
+
+ro_login2:
+  username: email
+  password: correct_password
+
+#有多少加多少個

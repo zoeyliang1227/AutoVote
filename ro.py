@@ -5,8 +5,6 @@ import datetime
 import random
 import getpass
 import sys, os, time
-from selenium.webdriver.common.proxy import Proxy
-from selenium.webdriver.common.proxy import ProxyType
 
 
 from threading import Timer
@@ -18,20 +16,20 @@ from selenium.webdriver.support import expected_conditions as EC
 
 credentials = yaml.load(open('config.yml'))
 
-# def job():
-#     print("I'm working...")
-#     ro()
+def job():
+    print("I'm working...")
+    ro()
 
-# #     schedule.every(10).minutes.do(job) 
-# #     schedule.every().hour.do(job)
-# schedule.every().day.at('10:11').do(job)
-# #     schedule.every().monday.do(job)
-# #     schedule.every().wednesday.at("13:15").do(job)
-# #     schedule.every().minute.at(":17").do(job)   
+# schedule.every(10).minutes.do(job) 
+# schedule.every().hour.do(job)
+schedule.every().day.at('10:11').do(job)
+# schedule.every().monday.do(job)
+# schedule.every().wednesday.at("13:15").do(job)
+# schedule.every().minute.at(":17").do(job)   
 
-# while True:  
-#     schedule.run_pending()  
-#     time.sleep(1)
+while True:  
+    schedule.run_pending()  
+    time.sleep(1)
 
 def get_driver():
     chrome_options = Options()
@@ -47,7 +45,7 @@ def get_driver():
     chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
     chrome_options.add_argument("disable-infobars")
     chrome_options.add_argument("window-size=1024,768")
-    chrome_options.add_argument('headless')                 # 瀏覽器不提供可視化頁面
+    # chrome_options.add_argument('headless')                 # 瀏覽器不提供可視化頁面
     chrome_options.add_argument('no-sandbox')               # 以最高權限運行
     chrome_options.add_argument('--start-maximized')        # 縮放縮放（全屏窗口）設置元素比較準確
     chrome_options.add_argument('--disable-gpu')            # 谷歌文檔說明需要加上這個屬性來規避bug
@@ -67,7 +65,7 @@ def get_driver():
 
 def ro():    
     try:
-        for i in range(2,4):
+        for i in range(1,5):
             driver = get_driver()
             # wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'style-module__title--1GEE0')))
             vote(driver)
@@ -82,17 +80,18 @@ def ro():
             done_title = done_vote.text
             if done_title == '作品當天已投過票':
                 print(done_title)
-                close = driver.find_element(By.XPATH, '//*[@id="useModal__3"]/div/div/div[1]/div[2]').click()
-                driver.refresh()
-                time.sleep(3)
-                logout = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[1]/div[2]/div[2]/span')
-                logout_name = logout.text
-                logout.click()
-                print(logout_name)
+                # close = driver.find_element(By.XPATH, '//*[@id="useModal__3"]/div/div/div[1]/div[2]').click()
+                # driver.refresh()
+                # time.sleep(3)
+                # logout = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[1]/div[2]/div[2]/span')
+                # logout_name = logout.text
+                # logout.click()
+                # print(logout_name)
                 driver.quit()
             else:
                 print(done_title)  
                 print('太感謝你了٩(●˙▿˙●)۶…⋆ฺ')
+                driver.quit()
     finally:
         time.sleep(3)
         driver.quit()
@@ -106,6 +105,7 @@ def vote(driver):     #choose and vote
 
     time.sleep(3)
     vote = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[4]/div/div[1]/div/div[5]').click()
+    time.sleep(3)
     
 def login(i, driver):
     WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.CLASS_NAME, 'style-module__title--1v3XO')))
@@ -126,5 +126,5 @@ def login(i, driver):
 if __name__ == '__main__':
     # input_id = input('Your FB ID:')
     # input_password = getpass.getpass('Your FB password') 
-    ro()
-    # job()
+    # ro()
+    job()
