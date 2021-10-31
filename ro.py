@@ -1,4 +1,4 @@
-import schedule
+# import schedule
 import time
 import yaml
 import datetime
@@ -87,39 +87,42 @@ def get_driver():
 
 def ro():    
     try:
-        for i in range(1, 17):
-            driver = get_driver()
-            # wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'style-module__title--1GEE0')))
-            vote(driver)
-            print(i)
-            time.sleep(3)
-            login(i, driver)            
-            driver.refresh()
-            time.sleep(3)
-            vote(driver)
-            time.sleep(3)
-            done_vote = driver.find_element(By.XPATH, '//*[@id="useModal__3"]/div/div/div[1]/div[1]')
-            time.sleep(3)
-            done_title = done_vote.text
-            if done_title == '作品當天已投過票':
-                print(done_title)
-                # driver.refresh()
-                # time.sleep(3)
-                # logout = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[1]/div[2]/div[2]/span')
-                # logout_name = logout.text
-                # logout.click()
-                # print(logout_name)
-                driver.quit()
+        for i in range(17, 19):
+            if i == 9:
+                pass
             else:
-                print(done_title)  
-                print('太感謝你了٩(●˙▿˙●)۶…⋆ฺ')
-                get_vote = driver.find_element(By.XPATH, '//*[@id="root"]/div[1]/div[4]/div[1]/div[4]/div/div[1]/div/div[6]/div[1]/span')
-                votes = get_vote.text
-                print('目前票數%s'%votes)
+                driver = get_driver()
+                # wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'style-module__title--1GEE0')))
+                vote(driver)
+                print(i)
+                time.sleep(3)
+                login(i, driver)            
+                driver.refresh()
+                time.sleep(3)
+                vote(driver)
+                time.sleep(3)
+                done_vote = driver.find_element(By.XPATH, '//*[@id="useModal__3"]/div/div/div[1]/div[1]')
+                time.sleep(3)
+                done_title = done_vote.text
+                if done_title == '作品當天已投過票':
+                    print(done_title)
+                    # driver.refresh()
+                    # time.sleep(3)
+                    # logout = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[1]/div[2]/div[2]/span')
+                    # logout_name = logout.text
+                    # logout.click()
+                    # print(logout_name)
+                    driver.quit()
+                else:
+                    print(done_title)  
+                    print('太感謝你了٩(●˙▿˙●)۶…⋆ฺ')
+                    get_vote = driver.find_element(By.XPATH, '//*[@id="root"]/div[1]/div[4]/div[1]/div[4]/div/div[1]/div/div[6]/div[1]/span')
+                    votes = get_vote.text
+                    print('目前票數%s'%votes)
 
-                driver.quit()
-                r = random.randrange(1,180)
-                time.sleep(r)
+                    driver.quit()
+                    r = random.randrange(1,180)
+                    time.sleep(r)
     finally:
         time.sleep(3)
         driver.quit()
@@ -156,5 +159,5 @@ def login(i, driver):
 if __name__ == '__main__':
     # input_id = input('Your FB ID:')
     # input_password = getpass.getpass('Your FB password') 
-    # ro()
-    main()
+    ro()
+    # main()
