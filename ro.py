@@ -3,8 +3,7 @@ import time
 import yaml
 import datetime
 import random
-import getpass
-import sys, os, time
+# import getpass
 import random
 
 
@@ -12,11 +11,12 @@ from threading import Timer
 from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
 credentials = yaml.load(open('config.yml'))
-
+timeout = 3
 hour = random.randint(7,12)
 minute = random.randint(0,59)
 
@@ -87,8 +87,8 @@ def get_driver():
 
 def ro():    
     try:
-        for i in range(17, 19):
-            if i == 9:
+        for i in range(16, 18):
+            if i == 6:
                 pass
             else:
                 driver = get_driver()
@@ -130,23 +130,30 @@ def ro():
 def vote(driver):     
     choose = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[2]/div[2]')
     choose.click()
-    WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.CLASS_NAME, 'style-module__active--1YiWY')))
+    WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'style-module__active--1YiWY')))
     choose_title = choose.text
     print('click %s'%choose_title)
 
-    time.sleep(3)
+    time.sleep(5)
     vote = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[4]/div/div[1]/div/div[5]')
-    WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.CLASS_NAME, 'style-module__title--2JLqT')))
-    vote.click()
+    WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'style-module__title--2JLqT')))
+    devil = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[4]/div/div[1]/div/div[2]')
+    name = devil.text
+    print(name)
+    try:
+        if name == '惡魔波利👿':
+            vote.click()
+    except NoSuchElementException as NE:
+        raise TypeError(name) from NE
     
 def login(i, driver):
-    WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.CLASS_NAME, 'style-module__title--1v3XO')))
-    fb = driver.find_element(By.XPATH, '//*[@id="useModal__1"]/div/div/div[1]/div[2]').click()
+    WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'style-module__title--1v3XO')))
+    driver.find_element(By.XPATH, '//*[@id="useModal__1"]/div/div/div[1]/div[2]').click()  #click FB 
     username = credentials['ro_login' + str(i) +'']['username']
-    user = driver.find_element(By.ID, 'email').send_keys(username)
+    driver.find_element(By.ID, 'email').send_keys(username) #FB username
 
     password = credentials['ro_login' + str(i) +'']['password']
-    pwd = driver.find_element(By.ID, 'pass').send_keys(password)
+    driver.find_element(By.ID, 'pass').send_keys(password) #FB pwd
     time.sleep(3)
     login = driver.find_element(By.ID, 'loginbutton').click()
     print('%s登入成功'%username)
