@@ -6,6 +6,7 @@
 /chromedriver.exe
 *.html
 *.png
+*.ico
 *.xml
 /__pycache__/
 /pylintrc
