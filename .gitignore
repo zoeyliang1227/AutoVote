@@ -1,8 +1,6 @@
 /.vscode/
 /config.yml
-/Chunyu.yml
-/lily.yml
-/Shanyu.yml
+/change.yml
 /chromedriver.exe
 *.html
 *.png
