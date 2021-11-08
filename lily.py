@@ -15,7 +15,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
-credentials = yaml.load(open('Chunyu.yml'))
+credentials = yaml.load(open('lily.yml'))
 timeout = 3
 
 def get_driver():
@@ -42,15 +42,15 @@ def get_driver():
     driver = webdriver.Chrome(options = chrome_options, executable_path = 'chromedriver')
 
     url = credentials['url']
-    rice_url = url
-    driver.get(rice_url)
+    taxation_url = url
+    driver.get(taxation_url)
 
     return driver
 
 
-def rice():    
+def taxation():    
     try:
-        for i in range(1, 6):
+        for i in range(1, 4):
             driver = get_driver()
             driver.switch_to.frame('worksFrame')
             WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'text-info')))
@@ -70,7 +70,7 @@ def rice():
                 fime_time = date_time+'.png'
                 print(fime_time)
                 driver.save_screenshot(fime_time)
-                driver.get_screenshot_as_file('./Chunyu/' + fime_time +'')
+                driver.get_screenshot_as_file('./lily/' + fime_time +'')
                 driver.quit()
             else:
                 print(done_title)  
@@ -79,7 +79,7 @@ def rice():
                 fime_time = date_time+'.png'
                 print(fime_time)
                 driver.save_screenshot(fime_time)
-                driver.get_screenshot_as_file('./Chunyu/' + fime_time +'')
+                driver.get_screenshot_as_file('./lily/' + fime_time +'')
                 driver.quit()
                 r = random.randrange(1,180)
                 time.sleep(r)
@@ -88,14 +88,14 @@ def rice():
         driver.quit()
 
 def vote(driver):   
-    rice = driver.find_element(By.XPATH, '//*[@id="promoEntry"]/div[5]/div[1]/div/div/div[2]')
-    rice_name = rice.text
-    rice.click()
+    taxation = driver.find_element(By.XPATH, '//*[@id="promoEntry"]/div[5]/div[1]/div/div/div[2]')
+    taxation_name = taxation .text
+    taxation.click()
     try:
-        if rice_name == '無米樂穰滿之禮':
-            print(rice_name)
+        if taxation_name == 'Different Worlds':
+            print(taxation_name)
     except NoSuchElementException as NE:
-        raise TypeError(rice_name) from NE
+        raise TypeError(taxation_name) from NE
     
 def login(i, driver):
     driver.find_element(By.XPATH, '//*[@id="promoEntry"]/div[5]/div[2]/div[2]/div[2]/div/div[2]').click()  #click FB 
@@ -123,4 +123,4 @@ def login(i, driver):
 
 
 if __name__ == '__main__':
-    rice()
+    taxation()

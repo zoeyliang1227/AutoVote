@@ -15,7 +15,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
-credentials = yaml.load(open('Chunyu.yml'))
+credentials = yaml.load(open('Shanyu.yml'))
 timeout = 3
 
 def get_driver():
@@ -42,13 +42,13 @@ def get_driver():
     driver = webdriver.Chrome(options = chrome_options, executable_path = 'chromedriver')
 
     url = credentials['url']
-    rice_url = url
-    driver.get(rice_url)
+    kenting_url = url
+    driver.get(kenting_url)
 
     return driver
 
 
-def rice():    
+def kenting():    
     try:
         for i in range(1, 6):
             driver = get_driver()
@@ -70,7 +70,7 @@ def rice():
                 fime_time = date_time+'.png'
                 print(fime_time)
                 driver.save_screenshot(fime_time)
-                driver.get_screenshot_as_file('./Chunyu/' + fime_time +'')
+                driver.get_screenshot_as_file('./Shanyu/' + fime_time +'')
                 driver.quit()
             else:
                 print(done_title)  
@@ -79,7 +79,7 @@ def rice():
                 fime_time = date_time+'.png'
                 print(fime_time)
                 driver.save_screenshot(fime_time)
-                driver.get_screenshot_as_file('./Chunyu/' + fime_time +'')
+                driver.get_screenshot_as_file('./Shanyu/' + fime_time +'')
                 driver.quit()
                 r = random.randrange(1,180)
                 time.sleep(r)
@@ -88,14 +88,14 @@ def rice():
         driver.quit()
 
 def vote(driver):   
-    rice = driver.find_element(By.XPATH, '//*[@id="promoEntry"]/div[5]/div[1]/div/div/div[2]')
-    rice_name = rice.text
-    rice.click()
+    kenting = driver.find_element(By.XPATH, '//*[@id="promoEntry"]/div[5]/div[1]/div/div/div[2]')
+    kenting_name = kenting.text
+    kenting.click()
     try:
-        if rice_name == '無米樂穰滿之禮':
-            print(rice_name)
+        if kenting_name == '家人出遊珍貴回憶':
+            print(kenting_name)
     except NoSuchElementException as NE:
-        raise TypeError(rice_name) from NE
+        raise TypeError(kenting_name) from NE
     
 def login(i, driver):
     driver.find_element(By.XPATH, '//*[@id="promoEntry"]/div[5]/div[2]/div[2]/div[2]/div/div[2]').click()  #click FB 
@@ -123,4 +123,4 @@ def login(i, driver):
 
 
 if __name__ == '__main__':
-    rice()
+    kenting()
