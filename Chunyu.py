@@ -15,7 +15,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
-credentials = yaml.load(open('Chunyu.yml'))
+credentials = yaml.load(open('five.yml'))
 timeout = 3
 
 def get_driver():
@@ -41,7 +41,7 @@ def get_driver():
 
     driver = webdriver.Chrome(options = chrome_options, executable_path = 'chromedriver')
 
-    url = credentials['url']
+    url = credentials['Chunyu_url']
     rice_url = url
     driver.get(rice_url)
 
