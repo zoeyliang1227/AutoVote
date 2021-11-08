@@ -2,6 +2,7 @@
 /config.yml
 /chromedriver.exe
 *.html
+*.png
 *.xml
 /__pycache__/
 /pylintrc
