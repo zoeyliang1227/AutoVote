@@ -32,7 +32,7 @@ def get_driver():
     chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
     chrome_options.add_argument("disable-infobars")
     chrome_options.add_argument("window-size=1024,768")
-    chrome_options.add_argument('headless')                 # 瀏覽器不提供可視化頁面
+    # chrome_options.add_argument('headless')                 # 瀏覽器不提供可視化頁面
     chrome_options.add_argument('no-sandbox')               # 以最高權限運行
     chrome_options.add_argument('--start-maximized')        # 縮放縮放（全屏窗口）設置元素比較準確
     chrome_options.add_argument('--disable-gpu')            # 谷歌文檔說明需要加上這個屬性來規避bug
@@ -58,7 +58,7 @@ def kenting():
             print(i)
             time.sleep(3)
             login(i, driver) 
-            time.sleep(3)
+            time.sleep(10)
             driver.switch_to.frame('worksFrame')
             done_vote = driver.find_element(By.XPATH, '//*[@id="promoEntry"]/div[5]/div[2]/div[2]/div[2]/div/div[2]')
             time.sleep(3)
@@ -67,18 +67,18 @@ def kenting():
                 print(done_title)
                 now = datetime.datetime.now()     #截圖的名稱拼接上日期
                 date_time = now.strftime('%Y%m%d')
-                fime_time = date_time+'.png'
+                fime_time = date_time+str(i)+'.png'
                 print(fime_time)
-                driver.save_screenshot(fime_time)
                 driver.get_screenshot_as_file('./Shanyu/' + fime_time +'')
                 driver.quit()
             else:
+                done_vote.click()
+                time.sleep(20)
                 print(done_title)  
                 now = datetime.datetime.now()     #截圖的名稱拼接上日期
                 date_time = now.strftime('%Y%m%d')
-                fime_time = date_time+'.png'
+                fime_time = date_time+str(i)+'.png'
                 print(fime_time)
-                driver.save_screenshot(fime_time)
                 driver.get_screenshot_as_file('./Shanyu/' + fime_time +'')
                 driver.quit()
                 r = random.randrange(1,180)

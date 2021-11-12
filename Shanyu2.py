@@ -41,16 +41,16 @@ def get_driver():
 
     driver = webdriver.Chrome(options = chrome_options, executable_path = 'chromedriver')
 
-    url = credentials['lily_url']
-    taxation_url = url
-    driver.get(taxation_url)
+    url = credentials['Shanyu2_url']
+    kenting_url = url
+    driver.get(kenting_url)
 
     return driver
 
 
-def taxation():    
+def kenting():    
     try:
-        for i in range(1, 4):
+        for i in range(6, 7):
             driver = get_driver()
             driver.switch_to.frame('worksFrame')
             WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'text-info')))
@@ -69,7 +69,7 @@ def taxation():
                 date_time = now.strftime('%Y%m%d')
                 fime_time = date_time+str(i)+'.png'
                 print(fime_time)
-                driver.get_screenshot_as_file('./lily/' + fime_time +'')
+                driver.get_screenshot_as_file('./Shanyu2/' + fime_time +'')
                 driver.quit()
             else:
                 done_vote.click()
@@ -79,7 +79,7 @@ def taxation():
                 date_time = now.strftime('%Y%m%d')
                 fime_time = date_time+str(i)+'.png'
                 print(fime_time)
-                driver.get_screenshot_as_file('./lily/' + fime_time +'')
+                driver.get_screenshot_as_file('./Shanyu2/' + fime_time +'')
                 driver.quit()
                 r = random.randrange(1,180)
                 time.sleep(r)
@@ -88,14 +88,14 @@ def taxation():
         driver.quit()
 
 def vote(driver):   
-    taxation = driver.find_element(By.XPATH, '//*[@id="promoEntry"]/div[5]/div[1]/div/div/div[2]')
-    taxation_name = taxation .text
-    taxation.click()
+    kenting = driver.find_element(By.XPATH, '//*[@id="promoEntry"]/div[5]/div[1]/div/div/div[2]')
+    kenting_name = kenting.text
+    kenting.click()
     try:
-        if taxation_name == 'Different Worlds':
-            print(taxation_name)
+        if kenting_name == '2010帶著家人去旅行':
+            print(kenting_name)
     except NoSuchElementException as NE:
-        raise TypeError(taxation_name) from NE
+        raise TypeError(kenting_name) from NE
     
 def login(i, driver):
     driver.find_element(By.XPATH, '//*[@id="promoEntry"]/div[5]/div[2]/div[2]/div[2]/div/div[2]').click()  #click FB 
@@ -123,4 +123,4 @@ def login(i, driver):
 
 
 if __name__ == '__main__':
-    taxation()
+    kenting()

@@ -41,16 +41,16 @@ def get_driver():
 
     driver = webdriver.Chrome(options = chrome_options, executable_path = 'chromedriver')
 
-    url = credentials['lily_url']
-    taxation_url = url
-    driver.get(taxation_url)
+    url = credentials['yeh_url']
+    dance_url = url
+    driver.get(dance_url)
 
     return driver
 
 
-def taxation():    
+def dance():    
     try:
-        for i in range(1, 4):
+        for i in range(1, 7):
             driver = get_driver()
             driver.switch_to.frame('worksFrame')
             WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'text-info')))
@@ -69,7 +69,7 @@ def taxation():
                 date_time = now.strftime('%Y%m%d')
                 fime_time = date_time+str(i)+'.png'
                 print(fime_time)
-                driver.get_screenshot_as_file('./lily/' + fime_time +'')
+                driver.get_screenshot_as_file('./yeh/' + fime_time +'')
                 driver.quit()
             else:
                 done_vote.click()
@@ -79,7 +79,7 @@ def taxation():
                 date_time = now.strftime('%Y%m%d')
                 fime_time = date_time+str(i)+'.png'
                 print(fime_time)
-                driver.get_screenshot_as_file('./lily/' + fime_time +'')
+                driver.get_screenshot_as_file('./yeh/' + fime_time +'')
                 driver.quit()
                 r = random.randrange(1,180)
                 time.sleep(r)
@@ -123,4 +123,4 @@ def login(i, driver):
 
 
 if __name__ == '__main__':
-    taxation()
+    dance()
