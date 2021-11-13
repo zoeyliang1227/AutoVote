@@ -15,10 +15,12 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
-credentials = yaml.load(open('config.yml'))
+url = 'https://rox.gnjoy.com.tw/roxfanart?fbclid=IwAR0q-Vxh2FGBrzzmKIE7tHEoVJskCZJkfNxAX3rlP-lEQoCMaaeF5ZXtT9g#_=_'
 timeout = 3
 hour = random.randint(7,12)
 minute = random.randint(0,59)
+lib = {}
+list=[]
 
 
 
@@ -45,7 +47,6 @@ def get_driver():
 
     driver = webdriver.Chrome(options = chrome_options, executable_path = 'chromedriver')
 
-    url = credentials['ro_url']
     ro_url = url
     driver.get(ro_url)
 
@@ -57,16 +58,43 @@ def check_vote():
         driver = get_driver()
         now = datetime.datetime.now()
         print(now)
-        get_vote(driver)
-        driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[3]/input').send_keys('106')
-        time.sleep(10)
-        get_vote(driver)
-        driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[3]/input').clear()
-        time.sleep(10)
-        driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[3]/input').send_keys('26')
-        time.sleep(10)
-        get_vote(driver)
+        # get_vote(driver)
+        # list_nu = ['106', '26', '36', '46']
+        # for i in range(len(list_nu)):
+        #     # driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[3]/input').send_keys('106')
+        #     driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[3]/input').send_keys(list_nu[i+1])
+        #     print(i+1)
+        #     time.sleep(10)
+        #     get_vote(driver)
+        #     driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[3]/input').clear()
+        #     time.sleep(10)
+            # driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[3]/input').send_keys('26')
+            # time.sleep(10)
+            # get_vote(driver)
+        choose = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[2]/div[2]')
+        choose.click()
+        WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'style-module__active--1YiWY')))
+        choose_title = choose.text
+        print('click %s'%choose_title)
+        
+        time.sleep(5)
+        for i in range(1, 9):
+            for n in range(1, 9):
+                print(n)
+                number = driver.find_element(By.XPATH, '//*[@id="root"]/*[name()="div"]/*[name()="div"][4]/*[name()="div"][1]/*[name()="div"][4]/*[name()="div"]/*[name()="div"]['+ str(n) + ']/*[name()="div"]/*[name()="div"][1]/*[name()="span"][2]')
+                number_name = number.text
+                # print(number_name)
+                time.sleep(3)
+                work = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[4]/div/div['+ str(n) + ']/div/div[6]/div[1]/span')
+                work_name = work.text
+                # print(work_name)
+                lib[number_name] = work_name
+                list.append(work_name)
+                # print(lib)
+                # print(type(work_name))
 
+            driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[4]/div/div[9]/div/span['+ str(i + 1) + ']').click()
+        print(sorted(lib.keys()))
                 
     finally:
         time.sleep(3)
@@ -89,6 +117,8 @@ def get_vote(driver):
     vote = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[4]/div/div[1]/div/div[6]/div[1]/span')
     currently = vote.text
     print(currently)
+    lib[name] = currently
+    list.append(currently)
 
 
 
