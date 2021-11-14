@@ -50,7 +50,7 @@ def get_driver():
 
 def dance():    
     try:
-        for i in range(1, 7):
+        for i in range(1, 5):
             driver = get_driver()
             driver.switch_to.frame('worksFrame')
             WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'text-info')))

@@ -7,9 +7,6 @@ Library         ro.py
 
 
 *** Test Cases ***
-CHUNYA
-    Chunyu.rice
-
 LILY
     lily.taxation
 

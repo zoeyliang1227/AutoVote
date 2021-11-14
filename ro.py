@@ -87,8 +87,8 @@ def get_driver():
 
 def ro():    
     try:
-        for i in range(1, 18):
-            if i == 6 or i == 15:
+        for i in range(14, 24):
+            if i == 6 or i == 15 or i == 14:
                 pass
             else:
                 driver = get_driver()
