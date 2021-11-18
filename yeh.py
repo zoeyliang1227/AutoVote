@@ -4,8 +4,6 @@ import yaml
 import datetime
 import random
 # import getpass
-import random
-
 
 from threading import Timer
 from selenium.webdriver.chrome.options import Options
@@ -44,45 +42,48 @@ def get_driver():
     url = credentials['yeh_url']
     dance_url = url
     driver.get(dance_url)
+ 
 
     return driver
 
-
 def dance():    
     try:
-        for i in range(1, 5):
-            driver = get_driver()
-            driver.switch_to.frame('worksFrame')
-            WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'text-info')))
-            vote(driver)
-            print(i)
-            time.sleep(3)
-            login(i, driver) 
-            time.sleep(10)
-            driver.switch_to.frame('worksFrame')
-            done_vote = driver.find_element(By.XPATH, '//*[@id="promoEntry"]/div[5]/div[2]/div[2]/div[2]/div/div[2]')
-            time.sleep(3)
-            done_title = done_vote.text
-            if done_title == '已投票':
-                print(done_title)
-                now = datetime.datetime.now()     #截圖的名稱拼接上日期
-                date_time = now.strftime('%Y%m%d')
-                fime_time = date_time+str(i)+'.png'
-                print(fime_time)
-                driver.get_screenshot_as_file('./yeh/' + fime_time +'')
-                driver.quit()
+        for i in range(8, 10):
+            if i == 9 or i == 13:
+                pass
             else:
-                done_vote.click()
-                time.sleep(20)
-                print(done_title)  
-                now = datetime.datetime.now()     #截圖的名稱拼接上日期
-                date_time = now.strftime('%Y%m%d')
-                fime_time = date_time+str(i)+'.png'
-                print(fime_time)
-                driver.get_screenshot_as_file('./yeh/' + fime_time +'')
-                driver.quit()
-                r = random.randrange(1,180)
-                time.sleep(r)
+                driver = get_driver()
+                driver.switch_to.frame('worksFrame')
+                WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'text-info')))
+                vote(driver)
+                print(i)
+                time.sleep(3)
+                login(i, driver) 
+                time.sleep(10)
+                driver.switch_to.frame('worksFrame')
+                done_vote = driver.find_element(By.XPATH, '//*[@id="promoEntry"]/div[5]/div[2]/div[2]/div[2]/div/div[2]')
+                time.sleep(3)
+                done_title = done_vote.text
+                if done_title == '已投票':
+                    print(done_title)
+                    now = datetime.datetime.now()     #截圖的名稱拼接上日期
+                    date_time = now.strftime('%Y%m%d')
+                    fime_time = date_time+str(i)+'.png'
+                    print(fime_time)
+                    driver.get_screenshot_as_file('./yeh/' + fime_time +'')
+                    driver.quit()
+                else:
+                    done_vote.click()
+                    time.sleep(20)
+                    print(done_title)  
+                    now = datetime.datetime.now()     #截圖的名稱拼接上日期
+                    date_time = now.strftime('%Y%m%d')
+                    fime_time = date_time+str(i)+'.png'
+                    print(fime_time)
+                    driver.get_screenshot_as_file('./yeh/' + fime_time +'')
+                    driver.quit()
+                    r = random.randrange(1,180)
+                    time.sleep(r)
     finally:
         time.sleep(3)
         driver.quit()

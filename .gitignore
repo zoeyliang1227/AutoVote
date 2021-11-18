@@ -6,5 +6,6 @@
 *.png
 *.ico
 *.xml
+*.csv
 /__pycache__/
 /pylintrc

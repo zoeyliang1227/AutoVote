@@ -4,7 +4,7 @@ import datetime
 import random
 
 from threading import Timer
-from ro import ro()
+from ro import ro
 
 hour = random.randint(7,12)
 minute = random.randint(0,59)

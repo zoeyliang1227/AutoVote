@@ -4,8 +4,6 @@ import yaml
 import datetime
 import random
 # import getpass
-import random
-
 
 from threading import Timer
 from selenium.webdriver.chrome.options import Options
@@ -38,21 +36,6 @@ def main(h=hour,m=minute):
     t = Timer(86400, main)
     t.start()
 
-# def job():
-#     print("I'm working...")
-#     ro()
-
-# schedule.every(10).minutes.do(job) 
-# schedule.every().hour.do(job)
-# schedule.every().day.at('10:14').do(job)
-# schedule.every().monday.do(job)
-# schedule.every().wednesday.at("13:15").do(job)
-# schedule.every().minute.at(":17").do(job)   
-
-# while True:  
-#     schedule.run_pending()  
-#     time.sleep(1)
-
 def get_driver():
     chrome_options = Options()
     # # 關閉通知(是否顯示通知)
@@ -82,12 +65,13 @@ def get_driver():
     ro_url = url
     driver.get(ro_url)
 
+
     return driver
 
 
 def ro():    
     try:
-        for i in range(14, 24):
+        for i in range(1, 25):
             if i == 6 or i == 15 or i == 14:
                 pass
             else:

@@ -10,17 +10,11 @@ Library         ro.py
 LILY
     lily.taxation
 
-SHANYU
-    Shanyu.kenting
-
-SHANYU
-    Shanyu2.kenting
-
-LINGO
-    Lingo.kenting
-
 YEH
     yeh.dance
+
+XIAOMING
+    Xiaoming.dance
 
 MIAN
     ro.ro

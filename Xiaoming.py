@@ -4,8 +4,6 @@ import yaml
 import datetime
 import random
 # import getpass
-import random
-
 
 from threading import Timer
 from selenium.webdriver.chrome.options import Options
@@ -41,17 +39,17 @@ def get_driver():
 
     driver = webdriver.Chrome(options = chrome_options, executable_path = 'chromedriver')
 
-    url = credentials['Lingo_url']
-    kenting_url = url
-    driver.get(kenting_url)
+    url = credentials['Xiaoming_url']
+    dance_url = url
+    driver.get(dance_url)
 
     return driver
 
 
-def kenting():    
+def dance():    
     try:
-        for i in range(10, 11):
-            if i == 9:
+        for i in range(1, 8):
+            if i == 9 or i == 13:
                 pass
             else:
                 driver = get_driver()
@@ -72,7 +70,7 @@ def kenting():
                     date_time = now.strftime('%Y%m%d')
                     fime_time = date_time+str(i)+'.png'
                     print(fime_time)
-                    driver.get_screenshot_as_file('./Lingo/' + fime_time +'')
+                    driver.get_screenshot_as_file('./Xiaoming/' + fime_time +'')
                     driver.quit()
                 else:
                     done_vote.click()
@@ -82,7 +80,7 @@ def kenting():
                     date_time = now.strftime('%Y%m%d')
                     fime_time = date_time+str(i)+'.png'
                     print(fime_time)
-                    driver.get_screenshot_as_file('./Lingo/' + fime_time +'')
+                    driver.get_screenshot_as_file('./Xiaoming/' + fime_time +'')
                     driver.quit()
                     r = random.randrange(1,180)
                     time.sleep(r)
@@ -91,14 +89,14 @@ def kenting():
         driver.quit()
 
 def vote(driver):   
-    kenting = driver.find_element(By.XPATH, '//*[@id="promoEntry"]/div[5]/div[1]/div/div/div[2]')
-    kenting_name = kenting.text
-    kenting.click()
+    taxation = driver.find_element(By.XPATH, '//*[@id="promoEntry"]/div[5]/div[1]/div/div/div[2]')
+    taxation_name = taxation .text
+    taxation.click()
     try:
-        if kenting_name == '團聚':
-            print(kenting_name)
+        if taxation_name == 'Different Worlds':
+            print(taxation_name)
     except NoSuchElementException as NE:
-        raise TypeError(kenting_name) from NE
+        raise TypeError(taxation_name) from NE
     
 def login(i, driver):
     driver.find_element(By.XPATH, '//*[@id="promoEntry"]/div[5]/div[2]/div[2]/div[2]/div/div[2]').click()  #click FB 
@@ -126,4 +124,4 @@ def login(i, driver):
 
 
 if __name__ == '__main__':
-    kenting()
+    dance()

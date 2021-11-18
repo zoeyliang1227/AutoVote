@@ -3,11 +3,9 @@ import time
 import yaml
 import datetime
 import random
-# import getpass
-import random
 
-
-from threading import Timer
+import pandas as pd
+# from bs4 import BeautifulSoup
 from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
@@ -20,7 +18,7 @@ timeout = 3
 hour = random.randint(7,12)
 minute = random.randint(0,59)
 lib = {}
-list=[]
+lists=[]
 
 
 
@@ -48,78 +46,77 @@ def get_driver():
     driver = webdriver.Chrome(options = chrome_options, executable_path = 'chromedriver')
 
     ro_url = url
-    driver.get(ro_url)
+    r = driver.get(ro_url)
 
     return driver
 
 
-def check_vote():    
+def check_vote(): 
+    # df = pd.DataFrame(lib, columns=['編號', '讚數'])
+
+    # with open('ro.csv', 'w') as csvfile:
+    #     writer = csv.writer(csvfile)
+    #     # writer = csv.DictWriter(csvfile, sorted(lib), delimiter=',')
+    #     writer.writerow(['編號', '讚數'])
     try:
         driver = get_driver()
         now = datetime.datetime.now()
         print(now)
-        # get_vote(driver)
-        # list_nu = ['106', '26', '36', '46']
-        # for i in range(len(list_nu)):
-        #     # driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[3]/input').send_keys('106')
-        #     driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[3]/input').send_keys(list_nu[i+1])
-        #     print(i+1)
-        #     time.sleep(10)
-        #     get_vote(driver)
-        #     driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[3]/input').clear()
-        #     time.sleep(10)
-            # driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[3]/input').send_keys('26')
-            # time.sleep(10)
-            # get_vote(driver)
         choose = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[2]/div[2]')
         choose.click()
         WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'style-module__active--1YiWY')))
         choose_title = choose.text
         print('click %s'%choose_title)
-        
         time.sleep(5)
-        for i in range(1, 9):
-            for n in range(1, 9):
-                print(n)
-                number = driver.find_element(By.XPATH, '//*[@id="root"]/*[name()="div"]/*[name()="div"][4]/*[name()="div"][1]/*[name()="div"][4]/*[name()="div"]/*[name()="div"]['+ str(n) + ']/*[name()="div"]/*[name()="div"][1]/*[name()="span"][2]')
-                number_name = number.text
-                # print(number_name)
-                time.sleep(3)
-                work = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[4]/div/div['+ str(n) + ']/div/div[6]/div[1]/span')
-                work_name = work.text
-                # print(work_name)
-                lib[number_name] = work_name
-                list.append(work_name)
-                # print(lib)
-                # print(type(work_name))
-
-            driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[4]/div/div[9]/div/span['+ str(i + 1) + ']').click()
-        print(sorted(lib.keys()))
-                
+        first = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[4]/div/div[1]/div/div[2]')
+        first_text = first.text
+        print(first_text)
+        if first_text == '最初的感動':
+            for i in range(1, 9):
+                print(i)
+                work = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[4]/div')
+                work_list = work.find_elements(By.CLASS_NAME, 'style-module__work-index--dQ6HD')
+                work_len = len(work_list)
+                # print(work_len)
+                for n in range(1, work_len+1):
+                    # print(n)
+                    time.sleep(3)
+                    number = driver.find_element(By.XPATH, '//*[@id="root"]/*[name()="div"]/*[name()="div"][4]/*[name()="div"][1]/*[name()="div"][4]/*[name()="div"]/*[name()="div"]['+ str(n) + ']/*[name()="div"]/*[name()="div"][1]/*[name()="span"][2]')
+                    number_name = number.text
+                    # print(number_name)
+                    time.sleep(1)
+                    work = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[4]/div/div['+ str(n) + ']/div/div[6]/div[1]/span')
+                    work_name = work.text
+                    # print(work_name)
+                    in_work_name = int(work_name)
+                    lib[number_name] = in_work_name
+                    # lists.append(in_work_name)
+                    
+                    # for key, value in lib.items():
+                    #     writer.writerow([key, value])
+                    
+                if i == 5:
+                    time.sleep(1)
+                    driver.find_element(By.XPATH, "//span[text()='下一頁']").click()
+                else:
+                    if i <= 5:
+                        driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[4]/div/div[9]/div/span['+ str(i + 1) + ']').click()
+                    else:
+                        driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[4]/div/div[9]/div/span['+ str(i - 5) + ']').click()
+            # print(lib)
+            # rank = dict(sorted(lib.items(), key=lambda item: item[1], reverse = True))
+            # print(rank)
+            df = pd.DataFrame(list(lib.items()), columns = ['編號', '讚數'])
+            # print(df)
+            df_sort = df.sort_values(['讚數'], ascending=False)
+            new_df = df_sort.head(10)  #依照欄位內容來進行排序
+            print("遞減排序")
+            print(new_df)
+            df_sort.to_csv('ro.csv', header=None, index=None, encoding='utf-8', columns = ['編號', '讚數'])
+            
     finally:
         time.sleep(3)
         driver.quit()
-
-def get_vote(driver):
-    choose = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[2]/div[2]')
-    choose.click()
-    WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'style-module__active--1YiWY')))
-    choose_title = choose.text
-    print('click %s'%choose_title)
-
-    time.sleep(5)
-    vote = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[4]/div/div[1]/div/div[5]')
-    WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'style-module__title--2JLqT')))
-    work = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[4]/div/div[1]/div/div[2]')
-    name = work.text
-    print(name)
-
-    vote = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div[4]/div/div[1]/div/div[6]/div[1]/span')
-    currently = vote.text
-    print(currently)
-    lib[name] = currently
-    list.append(currently)
-
 
 
 if __name__ == '__main__':
