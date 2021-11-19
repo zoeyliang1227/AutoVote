@@ -4,8 +4,6 @@ import yaml
 import datetime
 import random
 # import getpass
-import random
-
 
 from threading import Timer
 from selenium.webdriver.chrome.options import Options
@@ -41,64 +39,50 @@ def get_driver():
 
     driver = webdriver.Chrome(options = chrome_options, executable_path = 'chromedriver')
 
-    url = credentials['lily_url']
-    taxation_url = url
-    driver.get(taxation_url)
+    url = credentials['mia_url']
+    toast_url = url
+    driver.get(toast_url)
+ 
 
     return driver
 
-
-def taxation():    
+def toast():    
     try:
-        for i in range(1, 3):
-            driver = get_driver()
-            driver.switch_to.frame('worksFrame')
-            WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'text-info')))
-            vote(driver)
-            print(i)
-            time.sleep(3)
-            login(i, driver) 
-            time.sleep(10)
-            driver.switch_to.frame('worksFrame')
-            done_vote = driver.find_element(By.XPATH, '//*[@id="promoEntry"]/div[5]/div[2]/div[2]/div[2]/div/div[2]')
-            time.sleep(3)
-            done_title = done_vote.text
-            if done_title == '已投票':
-                print(done_title)
-                now = datetime.datetime.now()     #截圖的名稱拼接上日期
-                date_time = now.strftime('%Y%m%d')
-                fime_time = date_time+str(i)+'.png'
-                print(fime_time)
-                driver.get_screenshot_as_file('./lily/' + fime_time +'')
-                driver.quit()
+        for i in range(5, 11):
+            if i == 9 or i == 13 or i == 11:
+                pass
             else:
-                done_vote.click()
-                time.sleep(20)
-                print(done_title)  
-                now = datetime.datetime.now()     #截圖的名稱拼接上日期
+                driver = get_driver()
+                WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'shopname')))
+                vote(driver)
+                print(i)
+                time.sleep(3)
+                login(i, driver) 
+                time.sleep(10)
+                driver.switch_to_alert().accept()    #點選彈出裡面的確定按鈕
+                time.sleep(15)
+                now = datetime.datetime.now()     
                 date_time = now.strftime('%Y%m%d')
                 fime_time = date_time+str(i)+'.png'
                 print(fime_time)
-                driver.get_screenshot_as_file('./lily/' + fime_time +'')
+                driver.get_screenshot_as_file('./mia/' + fime_time +'')    #截圖的名稱拼接上日期
                 driver.quit()
-                r = random.randrange(1,180)
-                time.sleep(r)
     finally:
         time.sleep(3)
         driver.quit()
 
 def vote(driver):   
-    taxation = driver.find_element(By.XPATH, '//*[@id="promoEntry"]/div[5]/div[1]/div/div/div[2]')
-    taxation_name = taxation .text
-    taxation.click()
+    toast = driver.find_element(By.XPATH, '/html/body/main/section/div[2]/div[3]/div/div[4]/div[1]')
+    toast_name = toast.text
+    print(toast_name)
     try:
-        if taxation_name == 'Different Worlds':
-            print(taxation_name)
+        if toast_name == '一日之計在於晨(太陽蛋雲朵吐司)':
+            print(toast_name)
     except NoSuchElementException as NE:
-        raise TypeError(taxation_name) from NE
+        raise TypeError(toast_name) from NE
     
 def login(i, driver):
-    driver.find_element(By.XPATH, '//*[@id="promoEntry"]/div[5]/div[2]/div[2]/div[2]/div/div[2]').click()  #click FB 
+    driver.find_element(By.XPATH, '/html/body/main/section/div[2]/div[3]/div/div[4]/div[4]/div[1]/a/img').click()  #click FB 
     time.sleep(3)
     main_page = driver.current_window_handle        # storing the current window handle to get back to dashboard
     for handle in driver.window_handles:            # changing the handles to access login page
@@ -123,4 +107,4 @@ def login(i, driver):
 
 
 if __name__ == '__main__':
-    taxation()
+    toast()

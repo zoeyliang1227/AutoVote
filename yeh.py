@@ -48,7 +48,7 @@ def get_driver():
 
 def dance():    
     try:
-        for i in range(8, 10):
+        for i in range(12, 13):
             if i == 9 or i == 13:
                 pass
             else:
