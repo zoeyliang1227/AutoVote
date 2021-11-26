@@ -59,7 +59,7 @@ def toast():
                 time.sleep(3)
                 login(i, driver) 
                 time.sleep(10)
-                driver.switch_to_alert().accept()        #點選彈出裡面的確定按鈕
+                driver.switch_to.alert.accept()        #點選彈出裡面的確定按鈕
                 time.sleep(15)
                 now = datetime.datetime.now()     
                 date_time = now.strftime('%Y%m%d')
