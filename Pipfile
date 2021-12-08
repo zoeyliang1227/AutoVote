@@ -11,6 +11,8 @@ pyyaml = "~=5.4.1"
 selenium = "~=3.141.0"
 robotframework = "~=4.1.1"
 fake-useragent = "*"
+autopy = "~=4.0.0"
+pywin32 = "~=302"
 
 [dev-packages]
 

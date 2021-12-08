@@ -39,7 +39,7 @@ def get_driver():
 
     driver = webdriver.Chrome(options = chrome_options, executable_path = 'chromedriver')
 
-    url = credentials['angel_url']
+    url = credentials['angel2_url']
     toast_url = url
     driver.get(toast_url)
  
@@ -65,7 +65,7 @@ def toast():
                 date_time = now.strftime('%Y%m%d')
                 fime_time = date_time+str(i)+'.png'
                 print(fime_time)
-                driver.get_screenshot_as_file('./angel/' + fime_time +'')       #截圖的名稱拼接上日期
+                driver.get_screenshot_as_file('./angel2/' + fime_time +'')       #截圖的名稱拼接上日期
                 driver.quit()
                 r = random.randrange(1,180)
                 time.sleep(r)
@@ -94,7 +94,7 @@ def vote(driver):
     toast_name = toast.text
     print(toast_name)
     try:
-        if toast_name == '熊大的晨光':
+        if toast_name == '聖誕造型吐司':
             print(toast_name)
     except NoSuchElementException as NE:
         raise TypeError(toast_name) from NE
