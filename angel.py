@@ -30,7 +30,7 @@ def get_driver():
     chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
     chrome_options.add_argument("disable-infobars")
     chrome_options.add_argument("window-size=1024,768")
-    # chrome_options.add_argument('headless')                 # 瀏覽器不提供可視化頁面
+    chrome_options.add_argument('headless')                 # 瀏覽器不提供可視化頁面
     chrome_options.add_argument('no-sandbox')               # 以最高權限運行
     chrome_options.add_argument('--start-maximized')        # 縮放縮放（全屏窗口）設置元素比較準確
     chrome_options.add_argument('--disable-gpu')            # 谷歌文檔說明需要加上這個屬性來規避bug
@@ -48,7 +48,7 @@ def get_driver():
 
 def toast():    
     try:
-        for i in range(1, 5):
+        for i in range(1, 11):
             if i == 9 or i == 13:
                 pass
             else:
@@ -59,7 +59,7 @@ def toast():
                 time.sleep(3)
                 login(i, driver) 
                 time.sleep(10)
-                driver.switch_to_alert().accept()        #點選彈出裡面的確定按鈕
+                driver.switch_to.alert.accept()        #點選彈出裡面的確定按鈕
                 time.sleep(15)
                 now = datetime.datetime.now()     
                 date_time = now.strftime('%Y%m%d')
@@ -67,6 +67,8 @@ def toast():
                 print(fime_time)
                 driver.get_screenshot_as_file('./angel/' + fime_time +'')       #截圖的名稱拼接上日期
                 driver.quit()
+                r = random.randrange(1,180)
+                time.sleep(r)
                 # done_title = done_vote.text
                 # if done_title == '已投票':
                 #     print(done_title)

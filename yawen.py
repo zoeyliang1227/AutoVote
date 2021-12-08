@@ -48,11 +48,16 @@ def get_driver():
 
 def toast():    
     try:
+<<<<<<< HEAD
         for i in range(1, 5):
+=======
+        for i in range(1, 11):
+>>>>>>> refs/remotes/origin/main
             if i == 9 or i == 13:
                 pass
             else:
                 driver = get_driver()
+<<<<<<< HEAD
                 WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'entry-title')))
                 login(i, driver) 
                 time.sleep(3)
@@ -62,6 +67,14 @@ def toast():
                 login(i, driver) 
                 time.sleep(10)
                 driver.switch_to_alert().accept()        #點選彈出裡面的確定按鈕
+=======
+                time.sleep(3)
+                # WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'logo-area')))
+                # vote(driver)
+                print(i)
+                time.sleep(3)
+                login(i, driver) 
+>>>>>>> refs/remotes/origin/main
                 time.sleep(15)
                 now = datetime.datetime.now()     
                 date_time = now.strftime('%Y%m%d')
@@ -69,6 +82,11 @@ def toast():
                 print(fime_time)
                 driver.get_screenshot_as_file('./yawen/' + fime_time +'')       #截圖的名稱拼接上日期
                 driver.quit()
+<<<<<<< HEAD
+=======
+                r = random.randrange(1,180)
+                time.sleep(r)
+>>>>>>> refs/remotes/origin/main
                 # done_title = done_vote.text
                 # if done_title == '已投票':
                 #     print(done_title)
@@ -111,7 +129,11 @@ def login(i, driver):
     password = credentials['login' + str(i) +'']['password']
     driver.find_element(By.ID, 'pass').send_keys(password) #FB pwd
     time.sleep(3)
+<<<<<<< HEAD
     login = driver.find_element(By.ID, 'loginbutton').click()
+=======
+    login = driver.find_element(By.NAME, 'login').click()
+>>>>>>> refs/remotes/origin/main
     print('%s登入成功'%username)
     time.sleep(3)
 

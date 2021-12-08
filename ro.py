@@ -71,7 +71,11 @@ def get_driver():
 
 def ro():    
     try:
+<<<<<<< HEAD
         for i in range(7, 25):
+=======
+        for i in range(24, 25):
+>>>>>>> refs/remotes/origin/main
             if i == 6 or i == 15 or i == 14 or i == 17:
                 pass
             else:
