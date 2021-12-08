@@ -39,89 +39,85 @@ def get_driver():
 
     driver = webdriver.Chrome(options = chrome_options, executable_path = 'chromedriver')
 
-    url = credentials['Xiaoming_url']
-    dance_url = url
-    driver.get(dance_url)
+    url = credentials['yawen_url']
+    toast_url = url
+    driver.get(toast_url)
+ 
 
     return driver
 
-
-def dance():    
+def toast():    
     try:
-        for i in range(1, 8):
+        for i in range(1, 5):
             if i == 9 or i == 13:
                 pass
             else:
                 driver = get_driver()
-                driver.switch_to.frame('worksFrame')
-                WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'text-info')))
+                WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'entry-title')))
+                login(i, driver) 
+                time.sleep(3)
                 vote(driver)
                 print(i)
                 time.sleep(3)
                 login(i, driver) 
                 time.sleep(10)
-                driver.switch_to.frame('worksFrame')
-                done_vote = driver.find_element(By.XPATH, '//*[@id="promoEntry"]/div[5]/div[2]/div[2]/div[2]/div/div[2]')
-                time.sleep(3)
-                done_title = done_vote.text
-                if done_title == '已投票':
-                    print(done_title)
-                    now = datetime.datetime.now()     #截圖的名稱拼接上日期
-                    date_time = now.strftime('%Y%m%d')
-                    fime_time = date_time+str(i)+'.png'
-                    print(fime_time)
-                    driver.get_screenshot_as_file('./Xiaoming/' + fime_time +'')
-                    driver.quit()
-                else:
-                    done_vote.click()
-                    time.sleep(20)
-                    print(done_title)  
-                    now = datetime.datetime.now()     #截圖的名稱拼接上日期
-                    date_time = now.strftime('%Y%m%d')
-                    fime_time = date_time+str(i)+'.png'
-                    print(fime_time)
-                    driver.get_screenshot_as_file('./Xiaoming/' + fime_time +'')
-                    driver.quit()
-                    r = random.randrange(1,180)
-                    time.sleep(r)
+                driver.switch_to_alert().accept()        #點選彈出裡面的確定按鈕
+                time.sleep(15)
+                now = datetime.datetime.now()     
+                date_time = now.strftime('%Y%m%d')
+                fime_time = date_time+str(i)+'.png'
+                print(fime_time)
+                driver.get_screenshot_as_file('./yawen/' + fime_time +'')       #截圖的名稱拼接上日期
+                driver.quit()
+                # done_title = done_vote.text
+                # if done_title == '已投票':
+                #     print(done_title)
+                    
+                # else:
+                #     done_vote.click()
+                #     time.sleep(20)
+                #     print(done_title)  
+                #     now = datetime.datetime.now()     #截圖的名稱拼接上日期
+                #     date_time = now.strftime('%Y%m%d')
+                #     fime_time = date_time+str(i)+'.png'
+                #     print(fime_time)
+                #     driver.get_screenshot_as_file('./angel/' + fime_time +'')
+                #     driver.quit()
+                #     r = random.randrange(1,180)
+                #     time.sleep(r)
     finally:
         time.sleep(3)
         driver.quit()
 
 def vote(driver):   
-    taxation = driver.find_element(By.XPATH, '//*[@id="promoEntry"]/div[5]/div[1]/div/div/div[2]')
-    taxation_name = taxation .text
-    taxation.click()
+    toast = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/div/div/div/article/header/h2/text()')
+    toast_name = toast.text
+    print(toast_name)
     try:
-        if taxation_name == 'Different Worlds':
-            print(taxation_name)
+        if toast_name == '''
+                            懷念的家鄉
+                            ''':
+            print(toast_name)
     except NoSuchElementException as NE:
-        raise TypeError(taxation_name) from NE
+        raise TypeError(toast_name) from NE
     
 def login(i, driver):
-    driver.find_element(By.XPATH, '//*[@id="promoEntry"]/div[5]/div[2]/div[2]/div[2]/div/div[2]').click()  #click FB 
+    driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/div/div/div/article/div[2]/div/div/a[1]').click()  #click FB 
     time.sleep(3)
-    main_page = driver.current_window_handle        # storing the current window handle to get back to dashboard
-    for handle in driver.window_handles:            # changing the handles to access login page
-        if handle != main_page:
-            login_page = handle
 
-    driver.switch_to.window(login_page)             # change the control to signin page
     username = credentials['login' + str(i) +'']['username']
     driver.find_element(By.ID, 'email').send_keys(username) #FB username
 
     password = credentials['login' + str(i) +'']['password']
     driver.find_element(By.ID, 'pass').send_keys(password) #FB pwd
     time.sleep(3)
-    login = driver.find_element(By.NAME, 'login').click()
+    login = driver.find_element(By.ID, 'loginbutton').click()
     print('%s登入成功'%username)
     time.sleep(3)
-
-    driver.switch_to.window(main_page)      # change control to main page
 
     return i
 
 
 
 if __name__ == '__main__':
-    dance()
+    toast()
