@@ -15,4 +15,4 @@ Use **slelenium** to simulate user voting
 
 ## Run
 
-python ro.py
+- python ro.py
